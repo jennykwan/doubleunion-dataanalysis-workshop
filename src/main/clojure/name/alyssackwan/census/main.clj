@@ -1,4 +1,4 @@
-(ns doubleunion-dataanalysis-workshop.core
+(ns name.alyssackwan.census.main
   (:gen-class))
 
 (defn -main
