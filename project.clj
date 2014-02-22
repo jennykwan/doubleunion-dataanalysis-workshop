@@ -1,8 +1,8 @@
 (defproject doubleunion-dataanalysis-workshop "0.1.0-SNAPSHOT"
   :description "Data Analysis and Visualization with Clojure / Incanter and ClojureScript / D3"
   :url "http://alyssackwan.github.io/doubleunion-dataanalysis-workshop/"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :license {:name "GNU General Public License v3"
+            :url "http://www.gnu.org/copyleft/gpl.html"}
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [hiccup "1.0.5"]
                  [compojure "1.1.6"]
