@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>Double Union Data Analysis Workshop by alyssackwan - Initial Setup</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Double Union Data Analysis Workshop</h1>
+        <h2>Data Analysis and Visualization with Clojure / Incanter and ClojureScript / D3</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/alyssackwan/doubleunion-dataanalysis-workshop/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/alyssackwan/doubleunion-dataanalysis-workshop/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/alyssackwan/doubleunion-dataanalysis-workshop" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+<h3>
+<a name="initial-setup" class="anchor" href="#initial-setup"><span class="octicon octicon-link"></span></a>Initial Setup</h3>
+
+<p>This workshop requires the Clojure and ClojureScript programming languages.
+  We will be using Leiningen to create the project skeleton.</p>
+
+<ol>
+  <li><a href="http://alyssackwan.name/guides/clojure.html">Install Clojure and Leiningen.</a></li>
+  <li>Open a shell.</li>
+  <li>Navigate to the directory where you want to put the project. For example,
+    if you want the project in <code>~/projects/project</code>, you would
+    <code>cd ~/projects/</code>.</li>
+  <li><p><code>lein new app &lt;project&gt;</code></p>
+    <p>In this workshop, we will be naming the project <q>census</q>. Therefore,
+      the command would be <code>lein new app census</code>.</p>
+  </li>
+  <li>Take a look around at files. Most notably:
+    <ul>
+      <li><code>project.clj</code>
+        <ul>
+          <li>This is like <code>pom.xml</code> in a Maven
+            project. It tells Leiningen where everything is.</li>
+          <li>Notice how there is a <code>:main</code> entry. This tells
+            Leiningen which Clojure namespace to load when starting up this
+            program. It looks for a <code>-main</code> function.</li>
+        </ul>
+      </li>
+      <li><code>src/census/core.clj</code>
+        <ul>
+          <li>Remember how in <code>project.clj</code> the <code>:main</code>
+            entry was <code>census.core</code>? Well, that points to this file!</li>
+          <li>Find the <code>-main</code> function. Right now, it just prints
+            a line that was put there as a stub by Leiningen. We'll be changing
+            this later.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Notice all those funny parentheses. Those are <strong>S-expressions</strong>,
+    which are the most visible characteristic of Lisp dialects. We will be talking
+    about those later.</li>
+  <li>Back at the shell, in the <code>census</code> directory, run <code>lein
+      run</code>. This will execute the program. Note that it prints the line
+    in the function you saw earlier in <code>src/census/core.clj</code>.</li>
+</ol>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
