@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>Double Union Data Analysis Workshop by alyssackwan - Basic Web Server with Compojure and Ring</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Double Union Data Analysis Workshop</h1>
+        <h2>Data Analysis and Visualization with Clojure / Incanter and ClojureScript / D3</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/alyssackwan/doubleunion-dataanalysis-workshop/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/alyssackwan/doubleunion-dataanalysis-workshop/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/alyssackwan/doubleunion-dataanalysis-workshop" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+<h3>
+<a name="hour-1" class="anchor" href="#hour-1"><span class="octicon octicon-link"></span></a>Hour 1</h3>
+
+<h4>
+<a name="source-paths" class="anchor" href="source-paths"><span class="octicon octicon-link"></span></a>Changing Source Paths</h4>
+
+<p>This project will have a mix of Clojure and ClojureScript code. Maven has a
+  convention for organizing code:</p>
+
+<table>
+  <tr><th>Directory</th><th>Description</th></tr>
+  <tbody>
+    <tr><td>src/</td><td>all code</td></tr>
+    <tr><td>&nbsp;&nbsp;src/main/</td><td>all actual code</td></tr>
+    <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;src/main/java/</td><td>actual Java code</td></tr>
+    <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;src/main/clojure/</td><td>actual Clojure code</td></tr>
+    <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;src/main/clojurescript/</td><td>actual ClojureScript code</td></tr>
+    <tr><td>&nbsp;&nbsp;src/test/</td><td>all test code</td></tr>
+    <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;src/test/java/</td><td>test Java code</td></tr>
+    <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;src/test/clojure/</td><td>test Clojure code</td></tr>
+    <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;src/test/clojurescript/</td><td>test ClojureScript code</td></tr>
+  </tbody>
+</table>
+
+<p>Because most Clojure projects only have Clojure code, Leiningen makes a
+  simplifying change:</p>
+
+<table>
+  <tr><th>Directory</th><th>Description</th></tr>
+  <tbody>
+    <tr><td>src/</td><td>all actual code</td></tr>
+    <tr><td>test/</td><td>all test code</td></tr>
+  </tbody>
+</table>
+
+<p>Take a look at the current layout. It uses Leiningen's default.</p>
+
+<p>Because we're using both Clojure and ClojureScript, we need to revert to the
+  Maven layout. We then need to let Leiningen know.</p>
+
+<ol>
+  <li>Create the <code>src/main/clojure/</code> and <code>src/test/clojure/</code> directories.</li>
+  <li>Move all actual code from <code>src/</code> into <code>src/main/clojure/</code>.</li>
+  <li>Move all test code from <code>test/</code> into <code>src/test/clojure/</code>.</li>
+  <li>Modify the <code>project.clj</code> file.
+    <ol>
+      <li>Add an entry for <code>:source-paths ["src/main/clojure"]</code>.</li>
+      <li>Add an entry for <code>:test-paths ["src/test/clojure"]</code>.</li>
+      <li><p>The resulting <code>project.clj</code> should look like this:</p>
+        <p><code>(defproject census "0.1.0-SNAPSHOT"<br>
+            &nbsp;&nbsp;...<br>
+            &nbsp;&nbsp;:source-paths ["src/main/clojure"]<br>
+            &nbsp;&nbsp;:test-paths ["src/test/clojure"]<br>
+            &nbsp;&nbsp;...)</code></p></li>
+    </ol>
+  </li>
+  <li>Test that this worked by running <code>lein run</code> in a shell in the
+    root of the project directory.</li>
+</ol>
+
+<h4>
+<a name="midje" class="anchor" href="midje"><span class="octicon octicon-link"></span></a>Testing with Midje</h4>
+
+<p>Midje is a Clojure testing framework. This course will focus on proper
+  software engineering practices, which includes extensive unit testing.
+  Unit testing allows us to make changes with confidence that we didn't
+  introduce bugs into existing code. Having this safety net liberates us
+  to build good, working systems.</p>
+
+<h5>
+<a name="midje-install" class="anchor" href="midje-install"><span class="octicon octicon-link"></span></a>Installation</h5>
+
+<p>We will add Midje as a testing-time dependency to our Leiningen project.
+  We will also add the Leiningen Midje plugin to allow running unit tests
+  from the command line.</p>
+
+<ol>
+  <li>Open the <code>project.clj</code> file.</li>
+  <li><p>Add the following to the <code>:profiles</code> entry:</p>
+    <p><code>:dev {:dependencies [[midje "1.5.1"]]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:plugins [[lein-midje "3.1.1"]]}</code></p></li>
+  <li><p>The resulting <code>project.clj</code> should look like this:</p>
+    <p><code>(defproject census "0.1.0-SNAPSHOT"<br>
+        &nbsp;&nbsp;...<br>
+        &nbsp;&nbsp;:profiles {:uberjar {:aot :all}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:dev {:dependencies [[midje "1.5.1"]]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:plugins [[lein-midje "3.1.1"]]}})</code></p></li>
+  <li>In a shell, in the root of the project directory, <code>lein deps</code>. This will download all dependencies.</li>
+</ol>
+
+<h5>
+<a name="midje-usage" class="anchor" href="midje-usage"><span class="octicon octicon-link"></span></a>Usage</h5>
+
+<p>First, we must write a test. Then we can run all tests at the shell.</p>
+
+<ol>
+  <li>Write a failing test to see Midje in action.
+    <ol>
+      <li>Open the <code>src/test/clojure/census/core_test.clj</code> file.
+        Note that this is in the Clojure test directory and is named
+        with a <code>census.core-test</code> namespace directive in the top
+        of the file.</li>
+      <li>Import Midje into the namespace.
+        <ol>
+          <li>The namespace directive - <code>(ns ...)</code> - tells the Clojure
+            compiler what namespace the following defined symbols belong to. It
+            also allows the programmer to <code>import</code>, <code>use</code>,
+            or <code>require</code> symbols into the namespace.</li>
+          <li>Change the namespace directive by removing all existing
+            <code>:use</code> and <code>:require</code> options.</li>
+          <li><p>Add the following <code>:use</code> option:</p>
+            <p><code>(:use midje.sweet<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;census.core)</code></p>
+          </li>
+          <li><p>The resulting namespace directive looks like this:</p>
+            <p><code>(ns census.core<br>
+                &nbsp;&nbsp;(:use midje.sweet<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;census.core))</code></p>
+          </li>
+        </ol>
+      </li>
+      <li>Delete the <code>(deftest ...)</code> form. This is Clojure's core testing
+        library. We are using Midje instead.</li>
+      <li>Add a Midje test.
+        <ol>
+          <li>Tests in Midje are <q>facts</q>. Facts are statements of what
+            should be true about the code. Midje tests these facts to make sure
+            they're true.</li>
+          <li><p>Add a <code>(facts ...)</code> form below the namespace directive.</p>
+            <p><code>(fact<br>
+                &nbsp;&nbsp;true => false)</code></p>
+          </li>
+          <li>Here, we're saying that true is false. This is obviously wrong,
+            so it will fail.</li>
+        </ol>
+      </li>
+      <li><p>Run all Midje tests (just this one exists for now).</p>
+        <p>In a shell in the project root directory, <code>lein midje</code>.</p>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<h4>
+<a name="ring" class="anchor" href="ring"><span class="octicon octicon-link"></span></a>Handling HTTP with Ring</h4>
+
+<p>Ring is a low-level interface and library for building web applications in
+  Clojure. It provides a standard way of defining how to handle and respond to
+  HTTP requests.</p>
+
+<h5>
+<a name="http" class="anchor" href="http"><span class="octicon octicon-link"></span></a>Understanding HTTP</h5>
+
+<p>HTTP (Hypertext Transfer Protocol) is an application protocol for information
+  systems. It is a request-response protocol, allowing clients to request
+  resources from servers.</p>
+
+<p>For example, your web browser wants the Google homepage. So it takes the role
+  of client. It connects to google.com on port 80 and issues a GET request for
+  the <q>/</q> resource. Google responds with the body of the page, which the
+  web browser renders.</p>
+
+<p>The important terms to keep in mind for creating web applications:</p>
+
+<dt>Port</dt><dd>a virtual communications endpoint in an operationg system,
+          disambiguated by the port number and the communication protocol</dd>
+<dt>Request</dt><dd>a message sent from an HTTP client to an HTTP server,
+          containing a request method (like GET), and the name of the
+          resource</dd>
+<dt>Response</dt><dd>a message sent from an HTTP server to an HTTP client
+          after receiving a request; contains a status code (e.g. 200 for
+          <q>OK</q>) and an optional body</dd>
+
+<h5>
+<a name="ring-http" class="anchor" href="ring-http"><span class="octicon octicon-link"></span></a>What Ring Provides</h5>
+
+<p>Ring provides a structure for responding to HTTP requests. When requests come
+  in, they are handed to a function called a <q>handler</q>. <q>Middleware</q>
+  allows for modifying handler functions by adding or removing features.</p>
+
+<h5>
+<a name="ring-code" class="anchor" href="ring-code"><span class="octicon octicon-link"></span></a>Ring Code</h5>
+
+<p>Enough talk. Let's use Ring to set up an HTTP server that will respond
+  to all requests with a <q>Hello world!</q> response. First, we will add
+  the Ring library to our project. Because Ring is just a framework, it
+  needs a server. We'll use Jetty, an HTTP server in Java. After adding
+  these, we will write a handler function that returns our message.</p>
+
+<ol>
+  <li>Add Ring and Jetty.
+    <ol>
+      <li>Open <code>project.clj</code>.</li>
+      <li>Add <code>[ring "1.2.1"]</code> to the <code>:dependencies</code> vector.</li>
+      <li>Run <code>lein deps</code>.</li>
+    </ol>
+  </li>
+  <li>Create the handler function.
+    <ol>
+      <li>Open <code>src/main/clojure/census/core.clj</code>.</li>
+      <li><p>Create a function named <q>handle</q> like this:</p>
+        <p><code>(defn handle [request]<br>
+            &nbsp;&nbsp;"Hello world!")</code></p>
+      </li>
+    </ol>
+  </li>
+  <li>Attach the handler function to Jetty using Ring.
+    <ol>
+      <li><p><code>:use</code> the Ring/Jetty adapter namespace by modifying
+          the namespace declaration.</p>
+        <p><code>(:use ring.adapter.jetty)</code></p></li>
+      <li><p>Create a server in the main function.</p>
+        <p><code>(defn -main []<br>
+            &nbsp;&nbsp;(run-jetty handle {:port 8080})</code></p></li>
+    </ol>
+  </li>
+</ol>
+
+<p>Use <code>lein run</code> to run your server. Point your browser to
+  <a href="http://localhost:8080/">http://localhost:8080/</a>.</p>
+
+<p>Try a bunch of different URLs under that domain and port, like
+  <a href="http://localhost:8080/something">http://localhost:8080/something</a>
+  . Notice how they all just say <q>Hello world!</q>. That's because
+  we're ignoring what the request is asking for and just returning
+  that one thing.</p>
+
+<p>That's not very interesting. Let's change that.</p>
+
+<ol>
+  <li>Stop your server with <code>C-c</code>.</li>
+  <li>Open the <code>src/main/clojure/census/core.clj</code> file.</li>
+  <li><p>Change the handle function to this:</p>
+    <p><code>(str "You asked for " (:uri request) ".")</code></p></li>
+</ol>
+
+<p>Start up the server again. Now try a bunch of URLs in the browser.
+  What happens?</p>
+
+<h5>
+<a name="ring-test" class="anchor" href="ring-test"><span class="octicon octicon-link"></span></a>Testing the Handler and Ring</h5>
+
+<p>TODO</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
